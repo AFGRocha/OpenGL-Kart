@@ -1,26 +1,31 @@
 #include<iostream>
 #include<glad/glad.h>
 #include<GLFW/glfw3.h>
+#include<stb/stb_image.h>
 
+#include"Texture.h"
 #include"shaderClass.h"
 #include"VAO.h"
 #include"VBO.h"
+#include"EBO.h"
 
 int windowWidth = 960;
 int windowHeight = 720;
 
-//Create square vertice coordinates
+// Vertices coordinates
 GLfloat vertices[] =
-{
-	// First triangle (bottom-left, top-left, top-right)
-	-0.5f, -0.5f, 0.0f,
-	 0.5f, -0.5f, 0.0f,
-	 0.5f,  0.5f, 0.0f,
+{ //     COORDINATES     /        COLORS      /   TexCoord  //
+	-0.5f, -0.5f, 0.0f,     1.0f, 0.0f, 0.0f,	0.0f, 0.0f, // Lower left corner
+	-0.5f,  0.5f, 0.0f,     0.0f, 1.0f, 0.0f,	0.0f, 1.0f, // Upper left corner
+	 0.5f,  0.5f, 0.0f,     0.0f, 0.0f, 1.0f,	1.0f, 1.0f, // Upper right corner
+	 0.5f, -0.5f, 0.0f,     1.0f, 1.0f, 1.0f,	1.0f, 0.0f  // Lower right corner
+};
 
-	 // Second triangle (bottom-left, top-right, bottom-right)
-	 -0.5f, -0.5f, 0.0f,
-	  0.5f,  0.5f, 0.0f,
-	 -0.5f,  0.5f, 0.0f
+// Indices for vertices order
+GLuint indices[] =
+{
+	0, 2, 1, // Upper triangle
+	0, 3, 2 // Lower triangle
 };
 
 int main()
@@ -62,13 +67,23 @@ int main()
 
 	// Generates Vertex Buffer Object and links it to vertices
 	VBO VBO1(vertices, sizeof(vertices));
-
-	// Links VBO to VAO
-	VAO1.LinkVBO(VBO1, 0);
+	// Generates Element Buffer Object and links it to indices
+	EBO EBO1(indices, sizeof(indices));
+	// Links VBO attributes such as coordinates and colors to VAO
+	VAO1.LinkAttrib(VBO1, 0, 3, GL_FLOAT, 8 * sizeof(float), (void*)0);
+	VAO1.LinkAttrib(VBO1, 1, 3, GL_FLOAT, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+	VAO1.LinkAttrib(VBO1, 2, 2, GL_FLOAT, 8 * sizeof(float), (void*)(6 * sizeof(float)));
 	// Unbind all to prevent accidentally modifying them
 	VAO1.Unbind();
 	VBO1.Unbind();
+	EBO1.Unbind();
 	
+	// Gets ID of uniform called "scale"
+	GLuint uniID = glGetUniformLocation(shaderProgram.ID, "scale");
+
+	// Texture
+	Texture exampleTexture("example.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
+	exampleTexture.texUnit(shaderProgram, "tex0", 0); 
 
 	//Main loop
 	while (!glfwWindowShouldClose(window))
@@ -78,10 +93,18 @@ int main()
 		//Clean back buffer and assign new color
 		glClear(GL_COLOR_BUFFER_BIT);
 		shaderProgram.Activate();
+		glUniform1f(uniID, 0.5f);
+		exampleTexture.Bind();
 		VAO1.Bind();
-		glDrawArrays(GL_TRIANGLES, 0, 6);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 		// Swap the back buffer with the front buffer
 		glfwSwapBuffers(window);
+
+		//Closes window with escape
+		if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+		{
+			glfwSetWindowShouldClose(window, true);
+		}
 
 		//Event handling
 		glfwPollEvents();
@@ -89,9 +112,11 @@ int main()
 
 	VAO1.Delete();
 	VBO1.Delete();
+	EBO1.Delete();
+	exampleTexture.Delete();
 	shaderProgram.Delete();
 
-	//Delete widnow before ending the program
+	//Delete window before ending the program
 	glfwDestroyWindow(window);
 	//Terminate GLFW
 	glfwTerminate();
