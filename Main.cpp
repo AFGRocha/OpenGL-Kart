@@ -188,6 +188,10 @@ int main()
 	VBO2.Delete();
 	EBO2.Delete();
 	exitTexture.Delete();
+	VAO3.Delete();
+	VBO3.Delete();
+	EBO3.Delete();
+	logoTexture.Delete();
 	shaderProgram.Delete();
 
 	//Delete window before ending the program
