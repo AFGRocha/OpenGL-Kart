@@ -19,6 +19,9 @@
     <Filter Include="Resource Files\Textures">
       <UniqueIdentifier>{5a65392a-4eba-41a7-bd82-5349759c513b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\Textures\Menu">
+      <UniqueIdentifier>{15aff641-101e-4c5d-90e1-119cd9c0b166}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="glad.c">
@@ -74,6 +77,12 @@
   <ItemGroup>
     <Image Include="Assets\Textures\example.png">
       <Filter>Resource Files\Textures</Filter>
+    </Image>
+    <Image Include="Assets\Textures\Menu\start.png">
+      <Filter>Resource Files\Textures\Menu</Filter>
+    </Image>
+    <Image Include="Assets\Textures\Menu\exit.png">
+      <Filter>Resource Files\Textures\Menu</Filter>
     </Image>
   </ItemGroup>
 </Project>

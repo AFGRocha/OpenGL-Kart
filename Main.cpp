@@ -13,12 +13,20 @@ int windowWidth = 960;
 int windowHeight = 720;
 
 // Vertices coordinates
-GLfloat vertices[] =
+GLfloat verticesStart[] =
 { //     COORDINATES     /        COLORS      /   TexCoord  //
-	-0.5f, -0.5f, 0.0f,     1.0f, 0.0f, 0.0f,	0.0f, 0.0f, // Lower left corner
-	-0.5f,  0.5f, 0.0f,     0.0f, 1.0f, 0.0f,	0.0f, 1.0f, // Upper left corner
-	 0.5f,  0.5f, 0.0f,     0.0f, 0.0f, 1.0f,	1.0f, 1.0f, // Upper right corner
-	 0.5f, -0.5f, 0.0f,     1.0f, 1.0f, 1.0f,	1.0f, 0.0f  // Lower right corner
+	-0.4f, -0.08f, 0.0f,     1.0f, 0.0f, 0.0f,	0.0f, 0.0f, // Lower left corner
+	-0.4f,  0.08f, 0.0f,     0.0f, 1.0f, 0.0f,	0.0f, 1.0f, // Upper left corner
+	 0.4f,  0.08f, 0.0f,     0.0f, 0.0f, 1.0f,	1.0f, 1.0f, // Upper right corner
+	 0.4f, -0.08f, 0.0f,     1.0f, 1.0f, 1.0f,	1.0f, 0.0f  // Lower right corner
+};
+
+GLfloat verticesExit[] =
+{ //     COORDINATES     /        COLORS      /   TexCoord  //
+	-0.4f, -0.32f, 0.0f,     1.0f, 0.0f, 0.0f,	0.0f, 0.0f, // Lower left corner
+	-0.4f, -0.16f, 0.0f,     0.0f, 1.0f, 0.0f,	0.0f, 1.0f, // Upper left corner
+	 0.4f, -0.16f, 0.0f,     0.0f, 0.0f, 1.0f,	1.0f, 1.0f, // Upper right corner
+	 0.4f, -0.32, 0.0f,     1.0f, 1.0f, 1.0f,	1.0f, 0.0f  // Lower right corner
 };
 
 // Indices for vertices order
@@ -61,12 +69,14 @@ int main()
 	//Generates Shader object using shaders defualt.vert and default.frag
 	Shader shaderProgram("Shaders/default.vert", "Shaders/default.frag");
 
+	//Start button
+	// 
 	// Generates Vertex Array Object and binds it
 	VAO VAO1;
 	VAO1.Bind();
 
 	// Generates Vertex Buffer Object and links it to vertices
-	VBO VBO1(vertices, sizeof(vertices));
+	VBO VBO1(verticesStart, sizeof(verticesStart));
 	// Generates Element Buffer Object and links it to indices
 	EBO EBO1(indices, sizeof(indices));
 	// Links VBO attributes such as coordinates and colors to VAO
@@ -77,13 +87,36 @@ int main()
 	VAO1.Unbind();
 	VBO1.Unbind();
 	EBO1.Unbind();
-	
+
 	// Gets ID of uniform called "scale"
 	GLuint uniID = glGetUniformLocation(shaderProgram.ID, "scale");
 
 	// Texture
-	Texture exampleTexture("Assets/Textures/example.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
-	exampleTexture.texUnit(shaderProgram, "tex0", 0); 
+	Texture startTexture("Assets/Textures/Menu/start.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
+	startTexture.texUnit(shaderProgram, "tex0", 0);
+
+	//Exit button
+	// 
+	// Generates Vertex Array Object and binds it
+	VAO VAO2;
+	VAO2.Bind();
+
+	// Generates Vertex Buffer Object and links it to vertices
+	VBO VBO2(verticesExit, sizeof(verticesExit));
+	// Generates Element Buffer Object and links it to indices
+	EBO EBO2(indices, sizeof(indices));
+	// Links VBO attributes such as coordinates and colors to VAO
+	VAO2.LinkAttrib(VBO2, 0, 3, GL_FLOAT, 8 * sizeof(float), (void*)0);
+	VAO2.LinkAttrib(VBO2, 1, 3, GL_FLOAT, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+	VAO2.LinkAttrib(VBO2, 2, 2, GL_FLOAT, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+	// Unbind all to prevent accidentally modifying them
+	VAO2.Unbind();
+	VBO2.Unbind();
+	EBO2.Unbind();
+
+	// Texture
+	Texture exitTexture("Assets/Textures/Menu/exit.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
+	exitTexture.texUnit(shaderProgram, "tex0", 0);
 
 	//Main loop
 	while (!glfwWindowShouldClose(window))
@@ -94,8 +127,11 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT);
 		shaderProgram.Activate();
 		glUniform1f(uniID, 0.5f);
-		exampleTexture.Bind();
+		startTexture.Bind();
 		VAO1.Bind();
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		exitTexture.Bind();
+		VAO2.Bind();
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 		// Swap the back buffer with the front buffer
 		glfwSwapBuffers(window);
@@ -113,7 +149,11 @@ int main()
 	VAO1.Delete();
 	VBO1.Delete();
 	EBO1.Delete();
-	exampleTexture.Delete();
+	startTexture.Delete();
+	VAO2.Delete();
+	VBO2.Delete();
+	EBO2.Delete();
+	exitTexture.Delete();
 	shaderProgram.Delete();
 
 	//Delete window before ending the program
