@@ -13,20 +13,28 @@ int windowWidth = 960;
 int windowHeight = 720;
 
 // Vertices coordinates
+GLfloat verticesLogo[] =
+{ //     COORDINATES     /        COLORS      /   TexCoord  //
+	-0.6f,  0.2f, 0.0f,     1.0f, 0.0f, 0.0f,	0.0f, 0.0f, // Lower left corner
+	-0.6f,  0.55f, 0.0f,     0.0f, 1.0f, 0.0f,	0.0f, 1.0f, // Upper left corner
+	 0.6f,  0.55f, 0.0f,     0.0f, 0.0f, 1.0f,	1.0f, 1.0f, // Upper right corner
+	 0.6f,  0.2f, 0.0f,     1.0f, 1.0f, 1.0f,	1.0f, 0.0f  // Lower right corner
+};
+
 GLfloat verticesStart[] =
 { //     COORDINATES     /        COLORS      /   TexCoord  //
-	-0.4f, -0.08f, 0.0f,     1.0f, 0.0f, 0.0f,	0.0f, 0.0f, // Lower left corner
-	-0.4f,  0.08f, 0.0f,     0.0f, 1.0f, 0.0f,	0.0f, 1.0f, // Upper left corner
-	 0.4f,  0.08f, 0.0f,     0.0f, 0.0f, 1.0f,	1.0f, 1.0f, // Upper right corner
-	 0.4f, -0.08f, 0.0f,     1.0f, 1.0f, 1.0f,	1.0f, 0.0f  // Lower right corner
+	-0.4f, -0.40f, 0.0f,     1.0f, 0.0f, 0.0f,	0.0f, 0.0f, // Lower left corner
+	-0.4f,  -0.24f, 0.0f,     0.0f, 1.0f, 0.0f,	0.0f, 1.0f, // Upper left corner
+	 0.4f,  -0.24f, 0.0f,     0.0f, 0.0f, 1.0f,	1.0f, 1.0f, // Upper right corner
+	 0.4f, -0.40f, 0.0f,     1.0f, 1.0f, 1.0f,	1.0f, 0.0f  // Lower right corner
 };
 
 GLfloat verticesExit[] =
 { //     COORDINATES     /        COLORS      /   TexCoord  //
-	-0.4f, -0.32f, 0.0f,     1.0f, 0.0f, 0.0f,	0.0f, 0.0f, // Lower left corner
-	-0.4f, -0.16f, 0.0f,     0.0f, 1.0f, 0.0f,	0.0f, 1.0f, // Upper left corner
-	 0.4f, -0.16f, 0.0f,     0.0f, 0.0f, 1.0f,	1.0f, 1.0f, // Upper right corner
-	 0.4f, -0.32, 0.0f,     1.0f, 1.0f, 1.0f,	1.0f, 0.0f  // Lower right corner
+	-0.35f, -0.64f, 0.0f,     1.0f, 0.0f, 0.0f,	0.0f, 0.0f, // Lower left corner
+	-0.35f, -0.48f, 0.0f,     0.0f, 1.0f, 0.0f,	0.0f, 1.0f, // Upper left corner
+	 0.35f, -0.48f, 0.0f,     0.0f, 0.0f, 1.0f,	1.0f, 1.0f, // Upper right corner
+	 0.35f, -0.64, 0.0f,     1.0f, 1.0f, 1.0f,	1.0f, 0.0f  // Lower right corner
 };
 
 // Indices for vertices order
@@ -118,6 +126,29 @@ int main()
 	Texture exitTexture("Assets/Textures/Menu/exit.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
 	exitTexture.texUnit(shaderProgram, "tex0", 0);
 
+	//Logo
+	// 
+	// Generates Vertex Array Object and binds it
+	VAO VAO3;
+	VAO3.Bind();
+
+	// Generates Vertex Buffer Object and links it to vertices
+	VBO VBO3(verticesLogo, sizeof(verticesLogo));
+	// Generates Element Buffer Object and links it to indices
+	EBO EBO3(indices, sizeof(indices));
+	// Links VBO attributes such as coordinates and colors to VAO
+	VAO3.LinkAttrib(VBO3, 0, 3, GL_FLOAT, 8 * sizeof(float), (void*)0);
+	VAO3.LinkAttrib(VBO3, 1, 3, GL_FLOAT, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+	VAO3.LinkAttrib(VBO3, 2, 2, GL_FLOAT, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+	// Unbind all to prevent accidentally modifying them
+	VAO3.Unbind();
+	VBO3.Unbind();
+	EBO3.Unbind();
+
+	// Texture
+	Texture logoTexture("Assets/Textures/Menu/logo.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
+	logoTexture.texUnit(shaderProgram, "tex0", 0);
+
 	//Main loop
 	while (!glfwWindowShouldClose(window))
 	{
@@ -132,6 +163,9 @@ int main()
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 		exitTexture.Bind();
 		VAO2.Bind();
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		logoTexture.Bind();
+		VAO3.Bind();
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 		// Swap the back buffer with the front buffer
 		glfwSwapBuffers(window);

@@ -160,6 +160,7 @@
   <ItemGroup>
     <Image Include="Assets\Textures\example.png" />
     <Image Include="Assets\Textures\Menu\exit.png" />
+    <Image Include="Assets\Textures\Menu\logo.png" />
     <Image Include="Assets\Textures\Menu\start.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

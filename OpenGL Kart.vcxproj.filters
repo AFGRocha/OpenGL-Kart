@@ -84,5 +84,8 @@
     <Image Include="Assets\Textures\Menu\exit.png">
       <Filter>Resource Files\Textures\Menu</Filter>
     </Image>
+    <Image Include="Assets\Textures\Menu\logo.png">
+      <Filter>Resource Files\Textures\Menu</Filter>
+    </Image>
   </ItemGroup>
 </Project>
