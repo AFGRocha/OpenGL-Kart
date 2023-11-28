@@ -71,11 +71,11 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>C:\Users\anton\Git\OpenGL Kart\Libraries\include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\anton\Git\OpenGL Kart\Shaders;C:\Users\anton\Git\OpenGL Kart\Classes;C:\Users\anton\Git\OpenGL Kart\Libraries\include;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Users\anton\Git\OpenGL Kart\Libraries\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\Users\anton\Git\OpenGL Kart\Libraries\include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\anton\Git\OpenGL Kart\Shaders;C:\Users\anton\Git\OpenGL Kart\Classes;C:\Users\anton\Git\OpenGL Kart\Libraries\include;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Users\anton\Git\OpenGL Kart\Libraries\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -137,28 +137,28 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="EBO.cpp" />
+    <ClCompile Include="Classes\Texture2D\EBO\EBO.cpp" />
+    <ClCompile Include="Classes\Texture2D\Texture\Texture.cpp" />
+    <ClCompile Include="Classes\Texture2D\VAO\VAO.cpp" />
+    <ClCompile Include="Classes\Texture2D\VBO\VBO.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="shaderClass.cpp" />
+    <ClCompile Include="Shaders\shaderClass.cpp" />
     <ClCompile Include="stb.cpp" />
-    <ClCompile Include="Texture.cpp" />
-    <ClCompile Include="VAO.cpp" />
-    <ClCompile Include="VBO.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="default.frag" />
-    <None Include="default.vert" />
+    <None Include="Shaders\default.frag" />
+    <None Include="Shaders\default.vert" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="EBO.h" />
-    <ClInclude Include="shaderClass.h" />
-    <ClInclude Include="Texture.h" />
-    <ClInclude Include="VAO.h" />
-    <ClInclude Include="VBO.h" />
+    <ClInclude Include="Classes\Texture2D\EBO\EBO.h" />
+    <ClInclude Include="Classes\Texture2D\Texture\Texture.h" />
+    <ClInclude Include="Classes\Texture2D\VAO\VAO.h" />
+    <ClInclude Include="Classes\Texture2D\VBO\VBO.h" />
+    <ClInclude Include="Shaders\shaderClass.h" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="..\..\Downloads\example.png" />
+    <Image Include="Assets\Textures\example.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

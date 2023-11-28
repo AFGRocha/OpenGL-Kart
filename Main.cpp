@@ -3,11 +3,11 @@
 #include<GLFW/glfw3.h>
 #include<stb/stb_image.h>
 
-#include"Texture.h"
-#include"shaderClass.h"
-#include"VAO.h"
-#include"VBO.h"
-#include"EBO.h"
+#include"Texture2D/Texture/Texture.h"
+#include"Shaders/shaderClass.h"
+#include"Texture2D/VAO/VAO.h"
+#include"Texture2D/VBO/VBO.h"
+#include"Texture2D/EBO/EBO.h"
 
 int windowWidth = 960;
 int windowHeight = 720;
@@ -59,7 +59,7 @@ int main()
 
 
 	//Generates Shader object using shaders defualt.vert and default.frag
-	Shader shaderProgram("default.vert", "default.frag");
+	Shader shaderProgram("Shaders/default.vert", "Shaders/default.frag");
 
 	// Generates Vertex Array Object and binds it
 	VAO VAO1;
@@ -82,7 +82,7 @@ int main()
 	GLuint uniID = glGetUniformLocation(shaderProgram.ID, "scale");
 
 	// Texture
-	Texture exampleTexture("example.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
+	Texture exampleTexture("Assets/Textures/example.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
 	exampleTexture.texUnit(shaderProgram, "tex0", 0); 
 
 	//Main loop
